@@ -12,13 +12,14 @@ import { Mark } from "~/components/Mark";
 import {json, LoaderFunction, redirect} from "@remix-run/node";
 import {ActionFunction} from "@remix-run/router";
 import {useLoaderData, useNavigate} from "@remix-run/react";
+import {decodeTurkishCharacters} from "~/routes/play";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await requireSessionStatus(request, "win");
 
   return json(
       {
-        word: session.get("word"),
+        word: decodeTurkishCharacters(session.get("word")),
       },
       {
         headers: {
