@@ -1,3 +1,7 @@
+import turkce from "turkce";
+import {encodeTurkishCharacters} from "~/routes/play";
+
+
 const words = [
     "abacı",
     "abadi",
@@ -5537,9 +5541,19 @@ const words = [
     "züyuf"
 ]
 
-export function getRandomWord() {
+export async function getRandomWord(session: any) {
     const index = Math.floor(Math.random() * words.length);
-    return words[index];
+    var word = words[index];
+    var result;
+    try {
+        result = await turkce(word);
+    } catch (e) {
+        console.error(e);
+    } finally {
+        // @ts-ignore
+        session.set("wordMeaning", encodeTurkishCharacters(result?.anlam));
+    }
+    return word;
 }
 
 

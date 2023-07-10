@@ -21,20 +21,13 @@ import {ResetForm} from "~/components/form/ResetForm";
 import {InputForm} from "~/components/form/InputForm";
 import {ActionFunction} from "@remix-run/router";
 
-const turkce = require("turkce");
+
 export const loader: LoaderFunction = async ({request}) => {
     const session = await getSession(request.headers.get("Cookie"));
 
     if (!session.has("word")) {
-        var word = encodeTurkishCharacters(getRandomWord());
-        var result;
-        try {
-            result = await turkce(word);
-        } catch (e) {
-            console.error(e);
-        } finally {
-            session.set("wordMeaning", encodeTurkishCharacters(result?.anlam));
-        }
+        var word = encodeTurkishCharacters(await getRandomWord(session));
+
 
         session.set("word", word);
     }
