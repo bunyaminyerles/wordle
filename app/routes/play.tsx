@@ -21,11 +21,22 @@ import {ResetForm} from "~/components/form/ResetForm";
 import {InputForm} from "~/components/form/InputForm";
 import {ActionFunction} from "@remix-run/router";
 
+const turkce = require("turkce");
 export const loader: LoaderFunction = async ({request}) => {
     const session = await getSession(request.headers.get("Cookie"));
 
     if (!session.has("word")) {
-        session.set("word", encodeTurkishCharacters(getRandomWord()));
+        var word = encodeTurkishCharacters(getRandomWord());
+        var result;
+        try {
+            result = await turkce(word);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            session.set("wordMeaning", encodeTurkishCharacters(result?.anlam));
+        }
+
+        session.set("word", word);
     }
     if (!session.has("guesses")) {
         session.set("guesses", []);
@@ -224,7 +235,7 @@ export const ErrorBoundary: ErrorBoundaryComponent = ({error}: any) => {
             <div role="alert" className="rounded-md p-4 bg-red-100 ">
                 <h2 className="font-bold text-lg">Oh no!</h2>
                 <p>Something went wrong in the browser.</p>
-                <pre className="mt-4">{error.message}</pre>
+                <pre className="mt-4">{error?.message}</pre>
             </div>
         </main>
     );

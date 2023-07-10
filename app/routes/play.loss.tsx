@@ -20,6 +20,7 @@ export const loader: LoaderFunction = async ({request}) => {
     return json(
         {
             word: decodeTurkishCharacters(session.get("word")),
+            wordMeaning: decodeTurkishCharacters(session.get("wordMeaning")),
         },
         {
             headers: {
@@ -39,6 +40,7 @@ export const action: ActionFunction = async ({request}) => {
 
 export default function PlayLoss() {
     const {word} = useLoaderData<{ word: string }>();
+    const {wordMeaning} = useLoaderData<{ wordMeaning: string }>();
     const navigate = useNavigate();
     const onClose = useCallback(() => navigate("/play"), []);
 
@@ -49,6 +51,9 @@ export default function PlayLoss() {
                 <h2 className="text-3xl mb-4 font-semibold">Ooops...</h2>
                 <p className="max-w-lg mb-6">
                     Kaybettiniz <Mark>{word}</Mark> kelimesini bulamadınız!
+                </p>
+                <p className="max-w-lg mb-6">
+                    {wordMeaning} anlamına geliyor.
                 </p>
                 <form method="post">
                     <Button type="submit">Tekrar oyna</Button>
