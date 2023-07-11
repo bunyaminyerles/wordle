@@ -1,7 +1,3 @@
-import turkce from "turkce";
-import {encodeTurkishCharacters} from "~/routes/play";
-
-
 const words = [
     "abacı",
     "abadi",
