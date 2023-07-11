@@ -13,13 +13,15 @@ import {json, LoaderFunction, redirect} from "@remix-run/node";
 import {ActionFunction} from "@remix-run/router";
 import {useLoaderData, useNavigate} from "@remix-run/react";
 import {decodeTurkishCharacters} from "~/routes/play";
+import turkce from "turkce";
 
 export const loader: LoaderFunction = async ({request}) => {
     const session = await requireSessionStatus(request, "loss");
-
+    const result = await turkce(decodeTurkishCharacters(session.get("word")));
     return json(
         {
             word: decodeTurkishCharacters(session.get("word")),
+            wordMeaning: result?.anlam ? result.anlam + " anlamına geliyor." : "Anlam bulunamadı"
         },
         {
             headers: {
@@ -49,6 +51,9 @@ export default function PlayLoss() {
                 <h2 className="text-3xl mb-4 font-semibold">Ooops...</h2>
                 <p className="max-w-lg mb-6">
                     Kaybettiniz <Mark>{word}</Mark> kelimesini bulamadınız!
+                </p>
+                <p className="max-w-lg mb-6">
+                    {wordMeaning}
                 </p>
                 <form method="post">
                     <Button type="submit">Tekrar oyna</Button>

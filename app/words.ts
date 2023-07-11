@@ -5537,9 +5537,10 @@ const words = [
     "züyuf"
 ]
 
-export function getRandomWord() {
+export async function getRandomWord(session: any) {
     const index = Math.floor(Math.random() * words.length);
-    return words[index];
+    var word = words[index];
+    return word;
 }
 
 
