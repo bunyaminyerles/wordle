@@ -40,8 +40,7 @@ export const action: ActionFunction = async ({request}) => {
 };
 
 export default function PlayWin() {
-    const {word} = useLoaderData<{ word: string }>();
-    const {wordMeaning} = useLoaderData<{ wordMeaning: string }>();
+    const {word, wordMeaning} = useLoaderData<{ word: string, wordMeaning: string }>();
     const navigate = useNavigate();
     const onClose = useCallback(() => navigate("/play"), []);
 
