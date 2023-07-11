@@ -10,7 +10,7 @@ import {Dialog} from "~/components/Dialog";
 import {Button} from "~/components/Button";
 import {Mark} from "~/components/Mark";
 import {json, LoaderFunction, redirect} from "@remix-run/node";
-import {ActionFunction, defer} from "@remix-run/router";
+import {ActionFunction} from "@remix-run/router";
 import {useLoaderData, useNavigate} from "@remix-run/react";
 import {decodeTurkishCharacters} from "~/routes/play";
 import turkce from "turkce";

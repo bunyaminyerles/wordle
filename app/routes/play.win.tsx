@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {
     getSession,
     destroySession,
@@ -12,7 +12,7 @@ import {json, LoaderFunction, redirect} from "@remix-run/node";
 import {ActionFunction} from "@remix-run/router";
 import { useLoaderData, useNavigate} from "@remix-run/react";
 import {decodeTurkishCharacters} from "~/routes/play";
-import WordMeaning from "~/components/WordMeaning";
+import turkce from "turkce";
 
 export const loader: LoaderFunction = async ({request}) => {
     const session = await requireSessionStatus(request, "win");
@@ -40,7 +40,13 @@ export default function PlayWin() {
     const {word} = useLoaderData<{ word: string }>();
     const navigate = useNavigate();
     const onClose = useCallback(() => navigate("/play"), []);
+    const [wordMeaning, setWordMeaning] = React.useState<string>("");
 
+    useEffect(() => {
+        turkce(decodeTurkishCharacters(word)).then((result) => {
+            setWordMeaning(result?.anlam ? result.anlam + " anlamına geliyor." : "Anlam bulunamadı")
+        })
+    }, [])
     return (
         <Dialog onClose={onClose}>
             <div className="text-center">
@@ -49,7 +55,9 @@ export default function PlayWin() {
                 <p className="max-w-lg mb-6">
                     <Mark>{word}</Mark> kelimesini buldunuz!
                 </p>
-                <WordMeaning/>
+                <p className="max-w-lg mb-6">
+                    {wordMeaning}
+                </p>
                 <form method="post">
                     <Button type="submit">Tekrar oyna</Button>
                 </form>
