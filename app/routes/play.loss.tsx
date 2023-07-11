@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 
 import {
     getSession,
@@ -11,18 +11,16 @@ import {Button} from "~/components/Button";
 import {Mark} from "~/components/Mark";
 import {json, LoaderFunction, redirect} from "@remix-run/node";
 import {ActionFunction, defer} from "@remix-run/router";
-import {Await, useLoaderData, useNavigate} from "@remix-run/react";
+import {useLoaderData, useNavigate} from "@remix-run/react";
 import {decodeTurkishCharacters} from "~/routes/play";
 import turkce from "turkce";
-import WordMeaning from "~/components/WordMeaning";
 
 export const loader: LoaderFunction = async ({request}) => {
     const session = await requireSessionStatus(request, "loss");
-    const result = await turkce(decodeTurkishCharacters(session.get("word")));
-    return defer(
+    return json(
         {
             word: decodeTurkishCharacters(session.get("word")),
-            wordMeaning: result?.anlam ? result.anlam + " anlamına geliyor." : "Anlam bulunamadı"
+
         },
         {
             headers: {
@@ -40,10 +38,19 @@ export const action: ActionFunction = async ({request}) => {
     });
 };
 
+
 export default function PlayLoss() {
-    const {word, wordMeaning} = useLoaderData<{ word: string, wordMeaning: string }>();
+    const {word} = useLoaderData<{ word: string }>();
     const navigate = useNavigate();
     const onClose = useCallback(() => navigate("/play"), []);
+    const [wordMeaning, setWordMeaning] = React.useState<string>("");
+
+    useEffect(() => {
+        turkce(decodeTurkishCharacters(word)).then((result) => {
+            setWordMeaning(result?.anlam ? result.anlam + " anlamına geliyor." : "Anlam bulunamadı")
+        })
+    }, [])
+
 
     return (
         <Dialog onClose={onClose}>
