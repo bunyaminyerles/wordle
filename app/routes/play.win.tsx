@@ -1,4 +1,4 @@
-import {useCallback} from "react";
+import React, {useCallback} from "react";
 
 import {
     getSession,
@@ -11,7 +11,7 @@ import {Button} from "~/components/Button";
 import {Mark} from "~/components/Mark";
 import {json, LoaderFunction, redirect} from "@remix-run/node";
 import {ActionFunction} from "@remix-run/router";
-import {useLoaderData, useNavigate} from "@remix-run/react";
+import {Await, useLoaderData, useNavigate} from "@remix-run/react";
 import {decodeTurkishCharacters} from "~/routes/play";
 import turkce from "turkce";
 
@@ -53,7 +53,19 @@ export default function PlayWin() {
                     <Mark>{word}</Mark> kelimesini buldunuz!
                 </p>
                 <p className="max-w-lg mb-6">
-                    {wordMeaning}
+                    <React.Suspense fallback={<div>loading...</div>}>
+                        <Await
+                            resolve={wordMeaning}
+                            errorElement={
+                                <div>Could not load reviews 😬</div>
+                            }
+                            children={(resolvedReviews) => (
+                                <div>
+                                    {resolvedReviews}
+                                </div>
+                            )}
+                        />
+                    </React.Suspense>
                 </p>
                 <form method="post">
                     <Button type="submit">Tekrar oyna</Button>
