@@ -14,14 +14,13 @@ import {ActionFunction} from "@remix-run/router";
 import {Await, useLoaderData, useNavigate} from "@remix-run/react";
 import {decodeTurkishCharacters} from "~/routes/play";
 import turkce from "turkce";
+import WordMeaning from "~/components/WordMeaning";
 
 export const loader: LoaderFunction = async ({request}) => {
     const session = await requireSessionStatus(request, "loss");
-    const result = await turkce(decodeTurkishCharacters(session.get("word")));
     return json(
         {
-            word: decodeTurkishCharacters(session.get("word")),
-            wordMeaning: result?.anlam ? result.anlam + " anlamına geliyor." : "Anlam bulunamadı"
+            word: decodeTurkishCharacters(session.get("word"))
         },
         {
             headers: {
@@ -40,7 +39,7 @@ export const action: ActionFunction = async ({request}) => {
 };
 
 export default function PlayLoss() {
-    const {word, wordMeaning} = useLoaderData<{ word: string, wordMeaning: string }>();
+    const {word} = useLoaderData<{ word: string }>();
     const navigate = useNavigate();
     const onClose = useCallback(() => navigate("/play"), []);
 
@@ -53,19 +52,7 @@ export default function PlayLoss() {
                     Kaybettiniz <Mark>{word}</Mark> kelimesini bulamadınız!
                 </p>
                 <p className="max-w-lg mb-6">
-                    <React.Suspense fallback={<div>loading...</div>}>
-                        <Await
-                            resolve={wordMeaning}
-                            errorElement={
-                                <div>Could not load reviews 😬</div>
-                            }
-                            children={(resolvedReviews) => (
-                                <div>
-                                    {resolvedReviews}
-                                </div>
-                            )}
-                        />
-                    </React.Suspense>
+                    <WordMeaning/>
                 </p>
                 <form method="post">
                     <Button type="submit">Tekrar oyna</Button>
