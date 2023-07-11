@@ -10,7 +10,7 @@ import {Dialog} from "~/components/Dialog";
 import {Button} from "~/components/Button";
 import {Mark} from "~/components/Mark";
 import {json, LoaderFunction, redirect} from "@remix-run/node";
-import {ActionFunction} from "@remix-run/router";
+import {ActionFunction, defer} from "@remix-run/router";
 import {Await, useLoaderData, useNavigate} from "@remix-run/react";
 import {decodeTurkishCharacters} from "~/routes/play";
 import turkce from "turkce";
@@ -18,9 +18,11 @@ import WordMeaning from "~/components/WordMeaning";
 
 export const loader: LoaderFunction = async ({request}) => {
     const session = await requireSessionStatus(request, "loss");
-    return json(
+    const result = await turkce(decodeTurkishCharacters(session.get("word")));
+    return defer(
         {
-            word: decodeTurkishCharacters(session.get("word"))
+            word: decodeTurkishCharacters(session.get("word")),
+            wordMeaning: result?.anlam ? result.anlam + " anlamına geliyor." : "Anlam bulunamadı"
         },
         {
             headers: {
@@ -39,7 +41,7 @@ export const action: ActionFunction = async ({request}) => {
 };
 
 export default function PlayLoss() {
-    const {word} = useLoaderData<{ word: string }>();
+    const {word, wordMeaning} = useLoaderData<{ word: string, wordMeaning: string }>();
     const navigate = useNavigate();
     const onClose = useCallback(() => navigate("/play"), []);
 
@@ -52,7 +54,7 @@ export default function PlayLoss() {
                     Kaybettiniz <Mark>{word}</Mark> kelimesini bulamadınız!
                 </p>
                 <p className="max-w-lg mb-6">
-                    <WordMeaning/>
+                    {wordMeaning}
                 </p>
                 <form method="post">
                     <Button type="submit">Tekrar oyna</Button>
