@@ -191,7 +191,7 @@ export default function Play() {
                     <Grid>
                         {gridItems.map(({letter, status}, index) => (
                             <Tile key={index} status={status} delay={(index % 5) * 100}>
-                                {letter.toUpperCase()}
+                                {letter.toLocaleUpperCase("tr-TR")}
                             </Tile>
                         ))}
 
