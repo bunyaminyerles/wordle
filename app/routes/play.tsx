@@ -20,6 +20,7 @@ import {checkGuess, isEnd, isWin} from "~/game";
 import {ResetForm} from "~/components/form/ResetForm";
 import {InputForm} from "~/components/form/InputForm";
 import {ActionFunction} from "@remix-run/router";
+import Keypad from "~/components/Keypad";
 
 export const loader: LoaderFunction = async ({request}) => {
     const session = await getSession(request.headers.get("Cookie"));
@@ -194,7 +195,6 @@ export default function Play() {
                                 {letter.toLocaleUpperCase("tr-TR")}
                             </Tile>
                         ))}
-
                     </Grid>
                     <div className="mb-8 flex items-center gap-4 justify-center" style={{marginTop: "50px"}}>
 
@@ -209,8 +209,12 @@ export default function Play() {
                             </DismissableAlert>
                         </div>
                     )}
+
                 </div>
 
+            </div>
+            <div className="justify-center" style={{marginTop: "50px"}}>
+                <Keypad/>
             </div>
             <Outlet/>
         </main>
