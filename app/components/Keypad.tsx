@@ -63,14 +63,14 @@ export default function Keypad() {
         setCombinedVowelLetter(vowelLetter.map((letter) => {
             return {
                 ...letter,
-                status: guesses?.flat().find((guess) => guess.letter.toLocaleUpperCase("tr-TR") === letter.letter.toLocaleUpperCase("tr-TR"))?.status
+                status: guesses?.flat().find((guess) => decodeTurkishCharacters(guess.letter) === letter.letter)?.status
             }
         }));
 
         setCombinedConsonantLetter([...consonantLetter.map((letter) => {
             return {
                 ...letter,
-                status: guesses?.flat().find((guess) => guess.letter.toLocaleUpperCase("tr-TR") === letter.letter.toLocaleUpperCase("tr-TR"))?.status
+                status: guesses?.flat().find((guess) => decodeTurkishCharacters(guess.letter)  === letter.letter)?.status
             }
         }), guesses.length == 0 ? {letter:"😊"} : guesses.length == 1 ? {letter: "🙂"} :guesses.length == 2 ? {letter: "😐"} : guesses.length == 3 ? {letter:"🤨"}: guesses.length == 4 ? {letter:"☹️"}:guesses.length == 5 ? {letter:"😢"}: {letter:"😭"}]);
     }, [guesses])
