@@ -16,7 +16,7 @@ export function ResetForm({ disabled }: ResetFormProps) {
         disabled={disabled}
         value="reset"
       >
-        Reset
+        Sıfırla
       </Button>
     </Form>
   );

@@ -67,19 +67,19 @@ export default function Keypad() {
             }
         }));
 
-        setCombinedConsonantLetter(consonantLetter.map((letter) => {
+        setCombinedConsonantLetter([...consonantLetter.map((letter) => {
             return {
                 ...letter,
                 status: guesses?.flat().find((guess) => guess.letter.toLocaleUpperCase("tr-TR") === letter.letter.toLocaleUpperCase("tr-TR"))?.status
             }
-        }));
+        }), guesses.length == 0 ? {letter:"😊"} : guesses.length == 1 ? {letter: "🙂"} :guesses.length == 2 ? {letter: "😐"} : guesses.length == 3 ? {letter:"🤨"}: guesses.length == 4 ? {letter:"☹️"}:guesses.length == 5 ? {letter:"😢"}: {letter:"😭"}]);
     }, [guesses])
 
     return (
         <div>
             <div className="flex justify-center">
                 <div>
-                    <div className="grid grid-cols-8 gap-4">
+                    <div className="grid grid-cols-8 gap-2">
                         {combinedVowelLetter.map(({letter, status}, index) => (
                             <Tile key={index} status={status}>
                                 {letter.toLocaleUpperCase("tr-TR")}
@@ -88,9 +88,9 @@ export default function Keypad() {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center"  style={{marginTop: "20px"}}>
+            <div className="flex justify-center" style={{marginTop: "20px"}}>
                 <div>
-                    <div className="grid grid-cols-8 gap-4">
+                    <div className="grid grid-cols-11 gap-2">
                         {combinedConsonantLetter.map(({letter, status}, index) => (
                             <Tile key={index} status={status}>
                                 {letter.toLocaleUpperCase("tr-TR")}

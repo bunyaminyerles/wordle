@@ -491,8 +491,8 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 .my-8 {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .mx-4 {
@@ -584,6 +584,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-template-columns: repeat(8, minmax(0, 1fr));
 }
 
+.grid-cols-11 {
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -598,6 +602,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .justify-center {
   justify-content: center;
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .gap-4 {

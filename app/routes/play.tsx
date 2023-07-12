@@ -71,7 +71,7 @@ export const action: ActionFunction = async ({request}) => {
 
     if (typeof guess !== "string") {
         return json(
-            {error: "Guess must be of type string"},
+            {error: "Tahmin geçersiz bir değer içeriyor"},
             {
                 status: 400,
                 headers: {
@@ -82,7 +82,7 @@ export const action: ActionFunction = async ({request}) => {
     }
     if (guess.length !== 5) {
         return json(
-            {error: "Guess must be of length 5"},
+            {error: "Tahmin 5 harfli olmalıdır"},
             {
                 status: 400,
                 headers: {
@@ -93,7 +93,7 @@ export const action: ActionFunction = async ({request}) => {
     }
     if (!inWordList(guess)) {
         return json(
-            {error: "Guess is not in word list"},
+            {error: "Tahmin kelime listesinde mevcut değil"},
             {
                 status: 400,
                 headers: {
@@ -196,7 +196,7 @@ export default function Play() {
                             </Tile>
                         ))}
                     </Grid>
-                    <div className="mb-8 flex items-center gap-4 justify-center" style={{marginTop: "50px"}}>
+                    <div className="mb-8 flex items-center gap-4 justify-center" style={{marginTop: "20px"}}>
 
                         <ResetForm
                             disabled={status === "loading" || !resolvedGuesses.length}
@@ -213,7 +213,7 @@ export default function Play() {
                 </div>
 
             </div>
-            <div className="justify-center" style={{marginTop: "50px"}}>
+            <div className="justify-center" style={{marginTop: "30px"}}>
                 <Keypad/>
             </div>
             <Outlet/>
